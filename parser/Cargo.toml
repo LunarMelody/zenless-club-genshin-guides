@@ -1,0 +1,13 @@
+[package]
+name = "parser"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+# for linux    cargo b --target x86_64-unknown-linux-gnu --release
+# for windows  cargo b --target x86_64-pc-windows-gnu --release 
+
+[dependencies]
+clap =  { version = "3.1.18", features = ["derive"] }
+pulldown-cmark = { version = "0.9.1" }
