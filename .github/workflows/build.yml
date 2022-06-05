@@ -43,6 +43,11 @@ jobs:
           cd ../
           mv ./data/compiled/ ./compiled
       
-      - name: List All
-        run: ls -al ./compiled
-      
+      - name: Deploy
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: guides-compiled # The branch name where you want to push the assets
+          FOLDER: compiled # The directory where your assets are generated
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
+          MESSAGE: "Build: ({sha}) {msg}" # The commit message
