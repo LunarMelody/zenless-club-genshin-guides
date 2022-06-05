@@ -21,14 +21,13 @@ jobs:
           toolchain: stable
       
       - uses: actions/cache@v3
-        working-directory: ./parser
         with:
           path: | 
             ~/.cargo/bin/
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
-            target/
+            ./parser/target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       
       - name: Build Parser
