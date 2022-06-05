@@ -21,6 +21,7 @@ jobs:
           toolchain: stable
       
       - name: Build Parser
+        working-directory: ./parser
         run: cargo build --release --all-features
       
       - run: ls -al
