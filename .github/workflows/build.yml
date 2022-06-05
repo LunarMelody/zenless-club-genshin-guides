@@ -24,4 +24,11 @@ jobs:
         working-directory: ./parser
         run: cargo build --release --all-features
       
-      - run: ls -al
+      - name: Move Parser
+        run: |
+          mv ./parser/target/release/parser ./
+          parser -i ./data -o ./compiled
+      
+      - name: List All
+        run: ls -al ./compiled
+      
