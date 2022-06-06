@@ -1,3 +1,7 @@
+mod model;
+
+use crate::model::Guide;
+
 use clap::Parser as ClapParser;
 use pulldown_cmark::{html::push_html, Parser as CmarkParser};
 use std::error::Error;
@@ -41,7 +45,7 @@ fn output_path_buf(path: &str) -> PathBuf {
 
 fn output_file(file_prefix: &str, output_dir: &str) -> PathBuf {
     let resulting_dir = output_path_buf(output_dir);
-    resulting_dir.join(format!("{}.html", file_prefix))
+    resulting_dir.join(format!("{}.json", file_prefix))
 }
 
 fn main() {
@@ -59,10 +63,14 @@ fn main() {
 
         if path_str.ends_with(".md") {
             let html = md_file_to_html(path_str).unwrap();
+
+            let guide = Guide::new(file_prefix.to_string(), html);
+            let json_stringified = serde_json::to_string_pretty(&guide).unwrap();
+
             let resulting_path = output_file(file_prefix, &args.output_dir);
 
             println!("* writing to {:?}", &resulting_path);
-            fs::write(resulting_path, html)
+            fs::write(resulting_path, json_stringified)
                 .expect("! oh no, I couldn't write results to the file :(")
         }
     }
