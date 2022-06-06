@@ -1,6 +1,6 @@
 mod model;
 
-use crate::model::Guide;
+use model::Guide;
 
 use clap::Parser as ClapParser;
 use pulldown_cmark::{html::push_html, Parser as CmarkParser};
