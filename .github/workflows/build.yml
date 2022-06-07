@@ -43,6 +43,7 @@ jobs:
         env:
           REPO: self
           BRANCH: guides-compiled
+          SKIP_EMPTY_COMMITS: true
           FOLDER: compiled
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build: ({sha}) {msg}"
