@@ -3,6 +3,7 @@ mod model;
 use model::Guide;
 
 use clap::Parser as ClapParser;
+use glob::glob;
 use pulldown_cmark::{html::push_html, Parser as CmarkParser};
 use std::error::Error;
 use std::{fs, path::PathBuf};
@@ -51,28 +52,29 @@ fn output_file(file_prefix: &str, output_dir: &str) -> PathBuf {
 fn main() {
     let args = Args::parse();
 
-    let dir =
-        fs::read_dir(&args.input_dir).expect(&format!("{} dir doesn't exist!", &args.input_dir));
+    let pattern = args.input_dir + "/**/*.md";
 
-    for entry in dir.into_iter() {
-        let path = entry.unwrap().path();
-        let path_str = path.to_str().unwrap();
+    for entry in glob(&pattern).expect("! failed to read glob") {
+        let entry = entry.unwrap();
 
-        let file_name = path.file_name().unwrap().to_str().unwrap();
-        let file_prefix = file_name.split(".").next().unwrap();
+        let file_name = entry.file_name().unwrap();
+        let file_prefix = file_name
+            .to_str()
+            .unwrap()
+            .split(".")
+            .nth(0)
+            .unwrap()
+            .to_owned();
 
-        if path_str.ends_with(".md") {
-            let html = md_file_to_html(path_str).unwrap();
+        let html = md_file_to_html(&entry.display().to_string()).unwrap();
 
-            let guide = Guide::new(file_prefix.to_string(), html);
-            let json_stringified = serde_json::to_string_pretty(&guide).unwrap();
+        let output_path = output_file(&file_prefix, &args.output_dir);
 
-            let resulting_path = output_file(file_prefix, &args.output_dir);
+        let guide = Guide::new(file_prefix, html);
+        let jsonic = serde_json::to_string_pretty(&guide).unwrap();
 
-            println!("* writing to {:?}", &resulting_path);
-            fs::write(resulting_path, json_stringified)
-                .expect("! oh no, I couldn't write results to the file :(")
-        }
+        println!("* writing to {:?}...", output_path);
+        fs::write(output_path, jsonic).unwrap();
     }
 
     println!("> done!");
