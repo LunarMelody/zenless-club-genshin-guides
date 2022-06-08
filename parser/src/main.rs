@@ -6,6 +6,7 @@ use clap::Parser as ClapParser;
 use glob::glob;
 use pulldown_cmark::{html::push_html, Parser as CmarkParser};
 use std::error::Error;
+use std::io::Write;
 use std::{fs, path::PathBuf};
 
 #[derive(ClapParser, Debug)]
@@ -33,29 +34,35 @@ fn md_file_to_html(path: &str) -> Result<String, Box<dyn Error>> {
     Ok(md_to_html(content))
 }
 
-fn output_path_buf(path: &str) -> PathBuf {
-    let resulting_dir = PathBuf::from(&path);
-    if !resulting_dir.exists() {
-        println!("> {:?} doesn't exist :o", &resulting_dir);
-        println!("> no worries, I'll make one! :)");
-        fs::create_dir_all(&resulting_dir).expect("and I failed :(");
+fn make_output_path(dir: &str, file_name: &str) -> PathBuf {
+    let path: PathBuf = [dir, file_name].iter().collect();
+
+    path
+}
+
+fn make_output_file(path: PathBuf) -> Result<fs::File, Box<dyn Error>> {
+    let parent_dir = path.parent().unwrap();
+
+    if !parent_dir.exists() {
+        fs::create_dir_all(parent_dir)?
     }
 
-    resulting_dir
+    let file = fs::OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(path)?;
+
+    Ok(file)
 }
 
-fn output_file(file_prefix: &str, output_dir: &str) -> PathBuf {
-    let resulting_dir = output_path_buf(output_dir);
-    resulting_dir.join(format!("{}.json", file_prefix))
-}
-
-fn main() {
+fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
 
     let pattern = args.input_dir + "/**/*.md";
 
-    for entry in glob(&pattern).expect("! failed to read glob") {
-        let entry = entry.unwrap();
+    for entry in glob(&pattern)? {
+        let entry = entry?;
 
         let file_name = entry.file_name().unwrap();
         let file_prefix = file_name
@@ -66,16 +73,17 @@ fn main() {
             .unwrap()
             .to_owned();
 
-        let html = md_file_to_html(&entry.display().to_string()).unwrap();
+        let html = md_file_to_html(&entry.display().to_string())?;
+        let guide = Guide::new(&file_prefix, &html);
+        let jsonic = serde_json::to_string_pretty(&guide)?;
 
-        let output_path = output_file(&file_prefix, &args.output_dir);
-
-        let guide = Guide::new(file_prefix, html);
-        let jsonic = serde_json::to_string_pretty(&guide).unwrap();
-
+        let output_path = make_output_path(&args.output_dir, &format!("{}.json", &file_prefix));
         println!("* writing to {:?}...", output_path);
-        fs::write(output_path, jsonic).unwrap();
+
+        let mut file = make_output_file(output_path)?;
+        file.write_all(jsonic.as_bytes())?;
     }
 
     println!("> done!");
+    Ok(())
 }
