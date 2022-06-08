@@ -7,10 +7,10 @@ pub struct Guide {
 }
 
 impl Guide {
-    pub fn new(id: String, html: String) -> Self {
+    pub fn new<T: Into<String>>(id: T, html: T) -> Self {
         Guide {
-            id,
-            html,
+            id: id.into(),
+            html: html.into(),
         }
     }
 }
