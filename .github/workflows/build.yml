@@ -35,8 +35,8 @@ jobs:
         working-directory: ./parser
         run: cargo build --release --all-features
       
-      - name: Compile Data
-        run: ./parser/target/release/parser -i ./data -o ./compiled
+      - name: Compile Characters Guides
+        run: ./parser/target/release/parser -i ./data/characters -o ./compiled/characters
 
       - name: Deploy
         uses: s0/git-publish-subdir-action@develop
