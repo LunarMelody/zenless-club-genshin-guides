@@ -59,6 +59,7 @@ fn make_output_file(path: PathBuf) -> Result<fs::File, Box<dyn Error>> {
 fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
 
+    let mut published_guides: Vec<String> = Vec::new();
     let pattern = args.input_dir + "/**/*.md";
 
     for entry in glob(&pattern)? {
@@ -75,14 +76,28 @@ fn main() -> Result<(), Box<dyn Error>> {
 
         let html = md_file_to_html(&entry.display().to_string())?;
         let guide = Guide::new(&file_prefix, &html);
-        let jsonic = serde_json::to_string_pretty(&guide)?;
+        let jsonic = serde_json::to_string(&guide)?;
 
         let output_path = make_output_path(&args.output_dir, &format!("{}.json", &file_prefix));
         println!("* writing to {:?}...", output_path);
 
         let mut file = make_output_file(output_path)?;
         file.write_all(jsonic.as_bytes())?;
+
+        published_guides.push(file_prefix);
     }
+
+    let published_path: PathBuf = [&args.output_dir, "published.json"].iter().collect();
+    println!("* writing to {:?}...", published_path);
+
+    let mut file = fs::OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(published_path)?;
+
+    let jsonic = serde_json::to_string(&published_guides)?;
+    file.write_all(jsonic.as_bytes())?;
 
     println!("> done!");
     Ok(())
