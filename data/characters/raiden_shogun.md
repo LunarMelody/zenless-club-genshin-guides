@@ -1,3 +1,3 @@
-# Raiden Shogun
+# Raiden Shogun { #title }
 
 The almighty ruler.
