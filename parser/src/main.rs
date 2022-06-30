@@ -1,13 +1,15 @@
 mod model;
+mod utils;
 
 use model::Guide;
 
 use clap::Parser as ClapParser;
 use glob::glob;
-use pulldown_cmark::{html::push_html, Parser as CmarkParser};
 use std::error::Error;
 use std::io::Write;
 use std::{fs, path::PathBuf};
+
+use crate::utils::{md_file_to_html, make_output_path, make_output_file};
 
 #[derive(ClapParser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -17,43 +19,6 @@ struct Args {
 
     #[clap(short, long, default_value = "./output")]
     output_dir: String,
-}
-
-fn md_to_html(source: String) -> String {
-    let parser = CmarkParser::new(&source);
-
-    let mut html = String::new();
-    push_html(&mut html, parser);
-
-    html
-}
-
-fn md_file_to_html(path: &str) -> Result<String, Box<dyn Error>> {
-    let content = fs::read_to_string(path)?;
-
-    Ok(md_to_html(content))
-}
-
-fn make_output_path(dir: &str, file_name: &str) -> PathBuf {
-    let path: PathBuf = [dir, file_name].iter().collect();
-
-    path
-}
-
-fn make_output_file(path: PathBuf) -> Result<fs::File, Box<dyn Error>> {
-    let parent_dir = path.parent().unwrap();
-
-    if !parent_dir.exists() {
-        fs::create_dir_all(parent_dir)?
-    }
-
-    let file = fs::OpenOptions::new()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .open(path)?;
-
-    Ok(file)
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
