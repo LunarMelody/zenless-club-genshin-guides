@@ -3,7 +3,7 @@
   "compilerOptions": { 
     "strict": true,
     "target": "esnext",
-    "module": "esnext",
+    "module": "CommonJS",
     "lib": [
       "esnext"
     ],
@@ -19,6 +19,7 @@
     "paths": {
       "~/*": ["src/*"]
     },
+    "declaration": true,
     "skipLibCheck": true,
   },
   "include": ["src/**/*"],
