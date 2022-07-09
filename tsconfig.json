@@ -1,0 +1,26 @@
+{
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "compilerOptions": { 
+    "strict": true,
+    "target": "esnext",
+    "module": "esnext",
+    "lib": [
+      "esnext"
+    ],
+    "types": ["bun-types"],
+    "allowJs": true,
+    "checkJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "Node",
+    "baseUrl": ".",
+    "outDir": "build",
+    "paths": {
+      "~/*": ["src/*"]
+    },
+    "skipLibCheck": true,
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
