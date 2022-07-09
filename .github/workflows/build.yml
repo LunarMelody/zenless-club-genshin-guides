@@ -14,29 +14,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-        
-      - name: Rust Toolchain
-        uses: actions-rs/toolchain@v1
+
+      - uses: actions/setup-node@v3
         with:
-          toolchain: nightly
-      
-      - uses: actions/cache@v3
-        with:
-          path: | 
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            ./parser/target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          node-version: '16'
       
       - name: Build Parser
         if: steps.cache-numbers.outputs.cache-hit != 'true'
-        working-directory: ./parser
-        run: cargo build --release --all-features
-      
-      - name: Compile Characters Guides
-        run: ./parser/target/release/parser -i ./data/characters -o ./compiled/characters
+        run: npm install && npm start -- -i "data/**/*.md" -o "./compiled"
 
       - name: Deploy
         uses: s0/git-publish-subdir-action@develop
