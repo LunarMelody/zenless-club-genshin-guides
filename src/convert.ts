@@ -6,6 +6,7 @@ import { parseMarkdown } from "~/parser";
 import type { MetaType } from "~/meta";
 import { Meta, MetaRequired } from "~/meta";
 import { parse as parsePath } from "path";
+import { Guide } from "~/guide";
 
 const program = new Command();
 
@@ -41,7 +42,7 @@ paths.forEach(async (file) => {
   // parse meta again and store only required properties in published array
   published.push(MetaRequired.parse(meta));
 
-  const result = JSON.stringify({ meta, html: `${vfile}` });
+  const result = JSON.stringify(Guide.parse({ meta, html: `${vfile}` }));
   const fileJson = parsePath(file).name + ".json";
   const resultPath = join(outDir, fileJson);
 
