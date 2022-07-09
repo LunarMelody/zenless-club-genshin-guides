@@ -1,5 +1,5 @@
 ---
-id: kamisato_ayaka
+id: yae_miko
 type: character
 author: TenkoSpirit
 ---

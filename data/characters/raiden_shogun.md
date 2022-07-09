@@ -1,5 +1,5 @@
 ---
-id: kamisato_ayaka
+id: raiden_shogun
 type: character
 author: TenkoSpirit
 ---
