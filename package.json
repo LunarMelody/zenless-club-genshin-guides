@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/TenkoSpirit/zenless-club-genshin-guides#readme",
   "dependencies": {
-    "@mdx-js/mdx": "^2.1.2",
     "@tsconfig/node16": "^1.0.3",
     "@types/fs-extra": "^9.0.13",
     "@types/js-yaml": "^4.0.5",
