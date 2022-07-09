@@ -21,7 +21,7 @@ jobs:
       
       - name: Build Parser
         if: steps.cache-numbers.outputs.cache-hit != 'true'
-        run: npm install && npm start -- -i "data/**/*.md" -o "./compiled"
+        run: npm install && npm start -- -i "data/**/*.md" -o "./compiled" && npm run export:meta
 
       - name: Deploy
         uses: s0/git-publish-subdir-action@develop

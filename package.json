@@ -6,7 +6,8 @@
   "scripts": {
     "build": "esbuild --platform=node --format=esm --outfile=build/convert.mjs --external:./node_modules/* --bundle ./src/convert.ts",
     "prestart": "run-s build",
-    "start": "node build/convert.mjs"
+    "start": "node build/convert.mjs",
+    "export:meta": "cp src/meta.ts compiled/meta.ts"
   },
   "repository": {
     "type": "git",
