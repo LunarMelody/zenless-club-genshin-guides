@@ -1,0 +1,59 @@
+{
+  "name": "zenless-club-genshin-guides",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild --platform=node --format=esm --outfile=build/convert.mjs --external:./node_modules/* --bundle ./src/convert.ts",
+    "prestart": "run-s build",
+    "start": "node build/convert.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TenkoSpirit/zenless-club-genshin-guides.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TenkoSpirit/zenless-club-genshin-guides/issues"
+  },
+  "homepage": "https://github.com/TenkoSpirit/zenless-club-genshin-guides#readme",
+  "dependencies": {
+    "@mdx-js/mdx": "^2.1.2",
+    "@tsconfig/node16": "^1.0.3",
+    "@types/fs-extra": "^9.0.13",
+    "@types/js-yaml": "^4.0.5",
+    "@types/node": "^18.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.30.5",
+    "bun-types": "^0.1.2",
+    "commander": "^9.3.0",
+    "esbuild": "^0.14.48",
+    "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "fs-extra": "^10.1.0",
+    "globby": "^13.1.2",
+    "micromark": "^3.0.10",
+    "micromark-extension-frontmatter": "^1.0.0",
+    "micromark-extension-gfm": "^2.0.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "rehype-preset-minify": "^6.0.0",
+    "rehype-sanitize": "^5.0.1",
+    "rehype-slug": "^5.0.1",
+    "rehype-stringify": "^9.0.3",
+    "remark": "^14.0.2",
+    "remark-frontmatter": "^4.0.1",
+    "remark-gfm": "^3.0.1",
+    "remark-mdx": "^2.1.2",
+    "remark-parse": "^10.0.1",
+    "remark-rehype": "^10.1.0",
+    "remark-stringify": "^10.0.2",
+    "ts-node": "^10.8.2",
+    "typescript": "^4.7.4",
+    "unified": "^10.1.2",
+    "yaml": "^2.1.1",
+    "zod": "^3.17.3"
+  }
+}
